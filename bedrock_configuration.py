@@ -1,43 +1,33 @@
 import os
+from dotenv import load_dotenv
 from strands import Agent
 from strands.models import BedrockModel
 
-# Configurar la API Key de Bedrock como variable de entorno
-# IMPORTANTE: Reemplaza 'TU_API_KEY_DE_BEDROCK' con tu clave real
-os.environ['AWS_BEARER_TOKEN_BEDROCK'] = 'TU_API_KEY_DE_BEDROCK'
+
+load_dotenv()
+AWS_BEARER_TOKEN_BEDROCK = os.getenv("AWS_BEARER_TOKEN_BEDROCK")
 
 def main():
-    """
-    Función principal que configura el agente y responde una pregunta
-    """
 
-    print("Configurando el agente con Amazon Nova Lite...\n")
-
-    # Configurar el modelo Amazon Nova Lite 1.0
-    # Nova Lite es un modelo multimodal rápido y de bajo costo
     nova_lite_model = BedrockModel(
-        model_id="amazon.nova-lite-v1:0",  # ID del modelo Nova Lite
-        region_name="us-east-1",               # Región de AWS
-        temperature=0.7,                       # Controla la creatividad (0.0-1.0)
+        model_id="amazon.nova-lite-v1:0", 
+        region_name="us-east-1",              
+        temperature=0.7,                       
     )
-
-    # Crear el agente con el modelo configurado
+    
     agent = Agent(
         model=nova_lite_model,
         system_prompt="Eres un asistente útil y conocedor sobre inteligencia artificial y agentes."
     )
-
-    # Hacer la pregunta
+    
     pregunta = "¿Qué es un agente?"
 
     print(f"Pregunta: {pregunta}\n")
     print("Generando respuesta...")
     print("=" * 60)
 
-    # Obtener la respuesta del agente
     respuesta = agent(pregunta)
 
-    # Mostrar la respuesta
     print(respuesta)
     print("=" * 60)
     print("\n✅ Respuesta generada exitosamente!")
